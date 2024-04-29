@@ -1,0 +1,114 @@
+.header {
+  border: 1px solid #000;
+  justify-content: space-between;
+  display: flex;
+}
+
+.logo {
+  border-radius: 20%;
+  width: 200px;
+}
+
+.app {
+  background-color: #e6e6e6;
+}
+
+.nav-items {
+  padding: 0 20px;
+}
+
+.nav-items > ul {
+  font-size: 24px;
+  list-style-type: none;
+  display: flex;
+}
+
+.nav-items > ul > li {
+  margin: 10px;
+  padding: 10px;
+}
+
+.res-container {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.res-card {
+  background-color: azure;
+  border-radius: 20px;
+  width: 200px;
+  height: auto;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.res-desc {
+  align-items: left;
+  max-width: 100%;
+  height: auto;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.res-card:hover {
+  cursor: pointer;
+  border: 1px solid #000;
+}
+
+.search {
+  padding: 20px;
+}
+
+.search-container {
+  width: 300px;
+  padding: 20px;
+  position: relative;
+}
+
+.search-container input[type="text"] {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-container button i {
+  font-size: 16px;
+}
+
+.res-logo {
+  border-radius: 20px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.filter-btn {
+  cursor: pointer;
+  margin: 10px;
+}
+
+.shimmer-container {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.shimmer-card {
+  background-color: #f0f0f0;
+  width: 200px;
+  height: 400px;
+  margin: 20px;
+}
+
+.login {
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.filter {
+  display: flex;
+}
+/*# sourceMappingURL=index.9e4c6fd2.css.map */
