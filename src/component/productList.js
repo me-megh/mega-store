@@ -1,6 +1,6 @@
-import productimg from '../img/tshirt.jpg';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router'; 
 const ProductList=()=>{
   // State to track wishlist status for the first product only
   const [wishlist, setWishlist] = useState(false);
@@ -9,11 +9,11 @@ const ProductList=()=>{
   const toggleWishlist = () => {
     setWishlist(!wishlist); // Toggle the wishlist state
   };
-  const navigate = useNavigate(); // useNavigate hook
+  const router = useRouter();  // Use useRouter for navigation
 
   // Function to navigate to product details page
   const goToProductDetails = (productId) => {
-    navigate(`/product/${productId}`); // Navigate to product details page with ID
+    router.push(`/product/${productId}`); // Navigate to product details page with ID
   };
     return(<>
     <div class="container mx-auto py-8">
@@ -24,7 +24,7 @@ const ProductList=()=>{
 
   {/* Product Image Container */}
   <div className="relative">
-    <img src={productimg} alt="Product 1" onClick={() => goToProductDetails(1)}  className="w-full h-80 object-cover" />
+    <img src='/img/tshirt.jpg' alt="Product 1" onClick={() => goToProductDetails(1)}  className="w-full h-80 object-cover" />
 
     {/* Heart Icon Overlay on Product Image */}
     <button
@@ -65,7 +65,7 @@ const ProductList=()=>{
       {/* <!-- Product Card 2 --> */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
       <div className="relative">
-        <img src={productimg} alt="Product 2" onClick={() => goToProductDetails(2)}class="w-full h-80 object-cover"/>
+        <img src='/img/tshirt.jpg' alt="Product 2" onClick={() => goToProductDetails(2)}class="w-full h-80 object-cover"/>
         {/* Heart Icon Overlay on Product Image */}
     <button
      onClick={toggleWishlist}
@@ -99,7 +99,7 @@ const ProductList=()=>{
       {/* <!-- Product Card 3 --> */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
       <div className="relative">
-        <img src={productimg} alt="Product 3" onClick={() => goToProductDetails(3)}class="w-full h-80 object-cover"/>
+        <img src='/img/tshirt.jpg' alt="Product 3" onClick={() => goToProductDetails(3)}class="w-full h-80 object-cover"/>
         {/* Heart Icon Overlay on Product Image */}
     <button
        onClick={toggleWishlist}
@@ -133,7 +133,7 @@ const ProductList=()=>{
       {/* <!-- Product Card 4 --> */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
       <div className="relative">
-        <img src={productimg} alt="Product 4" onClick={() => goToProductDetails(4)} class="w-full h-80 object-cover"/>
+        <img src='/img/tshirt.jpg' alt="Product 4" onClick={() => goToProductDetails(4)} class="w-full h-80 object-cover"/>
         {/* Heart Icon Overlay on Product Image */}
     <button
        onClick={toggleWishlist}

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import pic from "../img/profile_icon.png";
 import { FaShoppingCart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
-
+import Profile from  './profile';
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   return (
     <header className="bg-gray-800 text-white">
@@ -32,25 +33,8 @@ const Header = () => {
           </a>
 
           {/* Profile Icon */}
-          <div className="relative group">
-            <button className="focus:outline-none">
-              <img
-                src={pic}
-                alt="Profile"
-                className="rounded-full w-10 h-10"
-              />
-            </button>
+          <Profile user={user} setUser={setUser} setShowLoginPopup={setShowLoginPopup} />
 
-            {/* Dropdown - appears on hover */}
-            <div className="absolute right-0 hidden bg-white text-gray-700 py-2 mt-2 rounded-lg shadow-lg w-48 group-hover:block">
-              <a href="/login" className="block px-4 py-2 hover:bg-gray-200">
-                Login
-              </a>
-              <a href="/Signup" className="block px-4 py-2 hover:bg-gray-200">
-                Signup
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Hamburger menu - visible on smaller screens */}

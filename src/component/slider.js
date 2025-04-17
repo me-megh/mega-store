@@ -1,11 +1,10 @@
-import slider1 from '../img/slider1.jpg';
-import slider2 from '../img/slider2.jpg';
+
 import { useState, useEffect } from 'react';
 
 const Slider = () => {
   const images = [
-    slider1, // Replace with your image URLs
-    slider2,
+    '/img/slider1.jpg', // Replace with your image URLs
+    '/img/slider2.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,7 +19,7 @@ const Slider = () => {
 
   // Automatically change the slide every 3 seconds
   useEffect(() => {
-    const intervalId = setInterval(nextSlide, 3000); // Change to next slide every 3 seconds
+    const intervalId = setInterval(nextSlide, 5000); // Change to next slide every 3 seconds
 
     // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
