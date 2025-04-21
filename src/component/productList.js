@@ -1,7 +1,7 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'; 
-const ProductList=()=>{
+const ProductList=({category,products})=>{
   // State to track wishlist status for the first product only
   const [wishlist, setWishlist] = useState(false);
 
@@ -14,12 +14,17 @@ const ProductList=()=>{
   // Function to navigate to product details page
   const goToProductDetails = (productId) => {
     router.push(`/product/${productId}`); // Navigate to product details page with ID
-  };
+  };  
+  //  console.log(products.data[0].description,"---1")
     return(<>
     <div class="container mx-auto py-8">
     <h1 class="text-3xl font-semibold text-center mb-8"> Product List</h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    {products?.data && Array.isArray(products.data) && products.data.map((data, index) =>  {
+      console.log(data,"----12")
+  return(<>
+  
     <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
 
   {/* Product Image Container */}
@@ -51,7 +56,7 @@ const ProductList=()=>{
   </div>
 
   <div className="p-4">
-    <h2 className="text-lg font-semibold mb-2">Classic White T-Shirt</h2>
+    <h2 className="text-lg font-semibold mb-2">{data.description}</h2>
     <p className="text-gray-700 mb-4">₹499</p>
     <a
       href="#"
@@ -61,7 +66,8 @@ const ProductList=()=>{
     </a>
   </div>
 </div>
-
+</>)
+})}
       {/* <!-- Product Card 2 --> */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden relative">
       <div className="relative">

@@ -30,13 +30,7 @@ const Profile=({ user, setUser })=>{
             </button>
 
             {/* Dropdown - appears on hover */}
-            <div className="absolute right-0 hidden bg-white text-gray-700 py-2 mt-2 rounded-lg shadow-lg w-48 group-hover:block">
-              {/* <a href="/login" className="block px-4 py-2 hover:bg-gray-200">
-                Login
-              </a>
-              <a href="/Signup" className="block px-4 py-2 hover:bg-gray-200">
-                Signup
-              </a> */}
+            <div className="absolute right-0 hidden bg-white text-gray-700 py-2 mt-2 rounded-lg shadow-lg w-48 group-hover:block group-hover:opacity-100 opacity-0 transition-opacity">
               {user ?
 <>
            <div className="text-center my-2 text-md font-semibold text-green-700">
@@ -48,7 +42,7 @@ const Profile=({ user, setUser })=>{
               <>
                <button
              onClick={() => setShowLoginPopup(true)}
-             className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+             className="block w-full text-left px-4 py-2 hover:bg-gray-200 focus:outline-none"
            >
              Login
            </button>

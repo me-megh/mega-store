@@ -17,8 +17,8 @@ const Header = () => {
         {/* Menu items - visible on larger screens */}
         <nav className="hidden md:flex space-x-6">
           <a href="/" className="hover:text-gray-300">Home</a>
-          <a href="/mens-tshirt" className="hover:text-gray-300">Men's T-shirts</a>
-          <a href="/womens-tshirt" className="hover:text-gray-300">Women's T-shirts</a>
+          <a href="/products?category=men" className="hover:text-gray-300">Men's T-shirts</a>
+          <a href="/products?category=women" className="hover:text-gray-300">Women's T-shirts</a>
         </nav>
 
         {/* Cart and Profile Icons - visible on all screens */}

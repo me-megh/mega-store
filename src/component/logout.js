@@ -10,6 +10,8 @@ const Logout = ({ setUser }) => {
       const res = await axios.post('http://localhost:3000/api/auth/logout', {}, {
         withCredentials: true
       });
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('user');
       setUser(null); // 👈 clear user state
     } catch (err) {
       console.error('Logout failed:', err);

@@ -13,7 +13,7 @@ import Checkout from './component/checkout';
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(true); // Toggle between login and signup
-  const [showPopup, setShowPopup] = useState(true); // Manage visibility of the popup
+  const [showPopup, setShowPopup] = useState(false); // Manage visibility of the popup
 
   const closePopup = () => setShowPopup(false); // Function to close the popup
   const [cartItems, setCartItems] = useState([]); // Manage cart items
@@ -36,11 +36,27 @@ const App = () => {
   };
 
   useEffect(() => {
+    const alreadyShown = localStorage.getItem('popupShown');
+    const isLoggedIn = localStorage.getItem('isLoggedIn'); // Check if the user is logged in
+  
+    if (!alreadyShown && !isLoggedIn) {
+      setShowPopup(true);
+      localStorage.setItem('popupShown', 'true');
+    }
+
+  
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        closePopup();
+      }
+    };
+  
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+  
 
   return (
     <div className="App">

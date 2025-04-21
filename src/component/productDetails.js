@@ -1,22 +1,21 @@
 import { useParams,useNavigate  } from 'react-router-dom';
 import { useState } from 'react';
-import productImage1 from '../img/tshirt.jpg'; // Add your product images
-import productImage2 from '../img/tshirt.jpg';
+// import productImage2 from '../img/tshirt.jpg';
 
-const ProductDetails = ({ addToCart }) => {
+const ProductDetails = ({ addToCart ,products}) => {
   const { id } = useParams(); // Product ID from URL
   const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState(null); // State for selected size
   const [selectedImage, setSelectedImage] = useState(productImage1); // State for selected image
 
-  const product = {
-    name: 'Slim Fit Cotton Shirt',
-    price: '₹1,299',
-    description:
-      'A slim fit cotton shirt made from sustainable materials with a stylish cut for casual and formal wear.',
-    availableSizes: ['S', 'M', 'L', 'XL'],
-    images: [productImage1, productImage2],
-  };
+  // const product = {
+  //   name: 'Slim Fit Cotton Shirt',
+  //   price: '₹1,299',
+  //   description:
+  //     'A slim fit cotton shirt made from sustainable materials with a stylish cut for casual and formal wear.',
+  //   availableSizes: ['S', 'M', 'L', 'XL'],
+  //   images: [productImage1],
+  // };
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert('Please select a size'); // Alert if size is not selected
@@ -32,6 +31,7 @@ const ProductDetails = ({ addToCart }) => {
     addToCart(productToAdd); // Call the addToCart function
     console.log(productToAdd)
   };
+  console.log(products,"----------")
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="lg:flex lg:space-x-8">
@@ -39,7 +39,7 @@ const ProductDetails = ({ addToCart }) => {
         <div className="lg:w-1/2">
           <div className="w-full h-auto mb-4">
             <img
-              src={selectedImage}
+              src='/img/tshirt.jpg'
               alt={product.name}
               className="w-full object-cover cursor-pointer"
             />

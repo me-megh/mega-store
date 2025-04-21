@@ -21,9 +21,12 @@ const Login = ({ setShowLogin,setShowPopup }) => {
       const res = await axios.post(`http://localhost:3000/api/auth${url}`, form, {
         withCredentials: true
       });
+       
       setMessage(`Success: Logged in as ${res.data.user.name}`);
       setShowPopup(false);
       setUser(res.data.user); // after successful login
+      localStorage.setItem('isLoggedIn', true);  // Store login state
+    localStorage.setItem('user', JSON.stringify(res.data.user)); 
       router.push('/');
       // Optionally store token: localStorage.setItem('token', res.data.token);
     } catch (err) {
@@ -57,7 +60,7 @@ const Login = ({ setShowLogin,setShowPopup }) => {
             id="password" 
             name="password"
             value={form.password} onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+            className="w-full px-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" 
             placeholder="••••••••" 
             required 
           />

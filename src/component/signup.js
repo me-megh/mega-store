@@ -9,6 +9,8 @@ const Signup = ({ setShowLogin }) => {
     try {
       const res = await axios.post(`http://localhost:3000/api/auth${url}`, form);
       console.log(res,"-----")
+      localStorage.setItem('isLoggedIn', true);
+    localStorage.setItem('user', JSON.stringify(res.data.user));
       setMessage(`Success: ${res.data.user.name}`);
       // Optionally store token: localStorage.setItem('token', res.data.token);
     } catch (err) {
