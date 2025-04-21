@@ -7,17 +7,14 @@ import Login from './component/login'; // Import Login Component
 import Signup from './component/signup'; // Import Signup Component
 import ProductDetails from './component/productDetails'; // Import ProductDetails
 import { useState,useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Cart from './component/cart';
 import Checkout from './component/checkout';
+import { Route, Routes } from 'react-router-dom'; // Import correctly
+import Layout from './component/layout';
 
 const App = () => {
-  const [showLogin, setShowLogin] = useState(true); // Toggle between login and signup
-  const [showPopup, setShowPopup] = useState(false); // Manage visibility of the popup
-
-  const closePopup = () => setShowPopup(false); // Function to close the popup
-  const [cartItems, setCartItems] = useState([]); // Manage cart items
-
+  const [showLogin, setShowLogin] = useState(true);
+  const [cartItems, setCartItems] = useState([]);
   // Function to add item to the cart
   const addToCart = (product) => {
     setCartItems((prevItems) => {
@@ -35,40 +32,19 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    const alreadyShown = localStorage.getItem('popupShown');
-    const isLoggedIn = localStorage.getItem('isLoggedIn'); // Check if the user is logged in
-  
-    if (!alreadyShown && !isLoggedIn) {
-      setShowPopup(true);
-      localStorage.setItem('popupShown', 'true');
-    }
+const [showPopup, setShowPopup] = useState(false);
 
-  
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        closePopup();
-      }
-    };
-  
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-  
-
+const closePopup = () => setShowPopup(false);
   return (
     <div className="App">
       {/* Wrap all content in Router */}
-      <Router>
-        {/* Header should be visible on all pages */}
-        <Header />
-
+  
+    
         {/* Main content dynamically rendered based on route */}
         <Routes>
+          <Layout>
           {/* Route for Home Page */}
-          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Home />} />
 
           {/* Route for Product Details Page */}
           <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
@@ -81,11 +57,11 @@ const App = () => {
 
           <Route path="/cart" element={<Cart cartItems={cartItems} />} />
           <Route path="/checkout" element={<Checkout cartItems={cartItems} />} />
+          </Layout>
         </Routes>
 
         {/* Footer should be visible on all pages */}
-        <Footer />
-      </Router>
+       
 
       {/* Show popup only if 'showPopup' is true */}
       {showPopup && (
@@ -98,13 +74,13 @@ const App = () => {
             >
               &times; {/* Close icon, could be replaced with an SVG */}
             </button>
-
             {/* Login or Signup Form */}
             {showLogin ? (
-              <Login setShowLogin={setShowLogin} />
+           <Login setShowLogin={setShowLogin} setShowPopup={setShowPopup} />
             ) : (
-              <Signup setShowLogin={setShowLogin} />
-            )}
+           <Signup setShowLogin={setShowLogin} setShowPopup={setShowPopup} />
+          )}
+
           </div>
         </div>
       )}

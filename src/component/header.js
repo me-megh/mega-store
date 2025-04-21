@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
 import Profile from  './profile';
+import Link from 'next/link';
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -8,29 +9,27 @@ const Header = () => {
 
   return (
     <header className="bg-gray-800 text-white">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="container mx-auhref px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="text-2xl font-bold">
-          <a href="/">Company Logo</a>
+        <a href="/">Company Logo</a> {/* Use Link for navigation */}
         </div>
 
         {/* Menu items - visible on larger screens */}
-        <nav className="hidden md:flex space-x-6">
-          <a href="/" className="hover:text-gray-300">Home</a>
-          <a href="/products?category=men" className="hover:text-gray-300">Men's T-shirts</a>
-          <a href="/products?category=women" className="hover:text-gray-300">Women's T-shirts</a>
-        </nav>
+        <Link href="/" className="hover:text-gray-300">Home</Link>
+          <Link href="/products?category=men" className="hover:text-gray-300">Men's T-shirts</Link>
+          <Link href="/products?category=women" className="hover:text-gray-300">Women's T-shirts</Link>
 
         {/* Cart and Profile Icons - visible on all screens */}
         <div className="flex items-center space-x-4">
           {/* Cart Icon */}
-          <a href="/cart" className="relative">
+          <Link href="/cart" className="relative">
             <FaShoppingCart className="w-6 h-6" />
-            {/* Badge to show the number of items in the cart */}
+            {/* Badge href show the number of items in the cart */}
             <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
               2
             </span>
-          </a>
+          </Link>
 
           {/* Profile Icon */}
           <Profile user={user} setUser={setUser} setShowLoginPopup={setShowLoginPopup} />
@@ -64,21 +63,21 @@ const Header = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <nav className="md:hidden bg-gray-800">
-          <a href="/" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link href="/" className="block px-4 py-2 text-white hover:bg-gray-700">
             Home
-          </a>
-          <a href="/mens-tshirt" className="block px-4 py-2 text-white hover:bg-gray-700">
+          </Link>
+          <Link href="/products?category=men" className="block px-4 py-2 text-white hover:bg-gray-700">
             Men's T-shirts
-          </a>
-          <a href="/womens-tshirt" className="block px-4 py-2 text-white hover:bg-gray-700">
+          </Link>
+          <Link href="/products?category=women" className="block px-4 py-2 text-white hover:bg-gray-700">
             Women's T-shirts
-          </a>
-          <a href="/login" className="block px-4 py-2 text-white hover:bg-gray-700">
+          </Link>
+          <Link href="/login" className="block px-4 py-2 text-white hover:bg-gray-700">
             Login
-          </a>
-          <a href="/logout" className="block px-4 py-2 text-white hover:bg-gray-700">
+          </Link>
+          <Link href="/logout" className="block px-4 py-2 text-white hover:bg-gray-700">
             Logout
-          </a>
+          </Link>
         </nav>
       )}
     </header>

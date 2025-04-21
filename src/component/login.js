@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import axios from "axios";
 import { useRouter } from 'next/router';
 
-const Login = ({ setShowLogin,setShowPopup }) => {
+const Login = ({ setShowLogin,setShowPopup,setUser }) => {
   const router = useRouter(); // ✅ Important!
   const [isLogin, setIsLogin] = useState(true);
     const [form, setForm] = useState({
@@ -23,10 +23,9 @@ const Login = ({ setShowLogin,setShowPopup }) => {
       });
        
       setMessage(`Success: Logged in as ${res.data.user.name}`);
-      setShowPopup(false);
       setUser(res.data.user); // after successful login
-      localStorage.setItem('isLoggedIn', true);  // Store login state
-    localStorage.setItem('user', JSON.stringify(res.data.user)); 
+      localStorage.setItem('isLoggedIn', true);
+      setShowPopup(false); // hide the popup
       router.push('/');
       // Optionally store token: localStorage.setItem('token', res.data.token);
     } catch (err) {
@@ -35,8 +34,7 @@ const Login = ({ setShowLogin,setShowPopup }) => {
   };
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-center">Login</h2>
-      
+      <h2 className="text-2xl font-bold text-center text-black">Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Field */}
         <div>
