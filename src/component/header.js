@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import { FaShoppingCart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
 import Profile from  './profile';
 import Link from 'next/link';
+import { CartContext } from "../../context/cartContext";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const { cartItems } = useContext(CartContext);
 
+  const totalQuantity = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   return (
     <header className="bg-gray-800 text-white">
       <div className="container mx-auhref px-4 py-4 flex items-center justify-between">
@@ -26,9 +29,11 @@ const Header = () => {
           <Link href="/cart" className="relative">
             <FaShoppingCart className="w-6 h-6" />
             {/* Badge href show the number of items in the cart */}
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-              2
-            </span>
+            {totalQuantity > 0 && (
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+          {totalQuantity}
+        </span>
+      )}
           </Link>
 
           {/* Profile Icon */}

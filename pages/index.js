@@ -7,9 +7,9 @@ import Signup from '../src/component/signup';
 const Index = () => {
   return (
   <div className="App"> 
-  <Header />
+  
   <Home />
-  <Footer />
+  
 </div>
 );
 };

@@ -1,7 +1,8 @@
 // pages/_app.js
+import Layout from '../src/component/layout';
 import '../styles/globals.css'; // Import Tailwind CSS
-import { useState,useEffect } from 'react';
-
+import { useState,useEffect ,useContext} from 'react';
+import { CartProvider } from '../context/cartContext';
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -18,7 +19,13 @@ function MyApp({ Component, pageProps }) {
     fetchUser();
   }, []);
 
-  return <Component {...pageProps} user={user} setUser={setUser} />;
+  return (<>
+  <CartProvider>
+  <Layout>
+  <Component {...pageProps} user={user} setUser={setUser} />
+  </Layout>
+  </CartProvider>
+  </>)
 }
 
 export default MyApp;

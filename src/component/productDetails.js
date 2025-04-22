@@ -1,4 +1,3 @@
-import { useParams,useNavigate  } from 'react-router-dom';
 import { useState } from 'react';
 // import productImage2 from '../img/tshirt.jpg';
 

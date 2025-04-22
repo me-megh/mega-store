@@ -17,7 +17,11 @@ const ProductPage = () => {
     fetchProducts();
   }, [category]);
 
-  return <ProductList category={category} products={products} />;
+  return (<>
+  {/* <Home/> */}
+  <ProductList category={category} products={products} />;
+  </>)
+ 
 };
 
 export default ProductPage;

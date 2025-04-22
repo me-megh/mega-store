@@ -42,7 +42,7 @@ const closePopup = () => setShowPopup(false);
     
         {/* Main content dynamically rendered based on route */}
         <Routes>
-          <Layout>
+
           {/* Route for Home Page */}
           <Route path="/products" element={<Home />} />
 
@@ -57,7 +57,7 @@ const closePopup = () => setShowPopup(false);
 
           <Route path="/cart" element={<Cart cartItems={cartItems} />} />
           <Route path="/checkout" element={<Checkout cartItems={cartItems} />} />
-          </Layout>
+          
         </Routes>
 
         {/* Footer should be visible on all pages */}
