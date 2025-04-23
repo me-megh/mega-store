@@ -1,6 +1,6 @@
-import Checkout from '../src/component/Checkout';
+import Checkout from '../src/component/checkout';
 
-const CheckoutPage = ({ cartItems }) => {
+const CheckoutPage = ({ cartItems = [] }) => {
   return <Checkout cartItems={cartItems} />;
 };
 

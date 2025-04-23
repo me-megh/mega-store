@@ -24,6 +24,8 @@ const Cart = () => {
               <div className="flex-grow">
                 <h2 className="text-lg font-semibold">{item.name}</h2>
                 <p className="text-gray-700">₹{item.price}</p>
+                <p className="text-sm text-gray-600">Size: {item.selectedSize}</p>
+                <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
               </div>
               <button onClick={() => removeFromCart(item._id)} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                 Remove
@@ -37,7 +39,7 @@ const Cart = () => {
       {cartItems.length > 0 && (
         <div className="mt-8">
           <h2 className="text-2xl font-semibold">Total: ₹{totalPrice}</h2>
-          <button className="bg-green-500 text-white px-6 py-3 rounded-md mt-4 hover:bg-green-600" onClick={() => navigate('/checkout')}>
+          <button className="bg-green-500 text-white px-6 py-3 rounded-md mt-4 hover:bg-green-600" onClick={() => router.push('/checkout')}>
             Proceed to Checkout
           </button>
         </div>

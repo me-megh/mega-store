@@ -27,7 +27,7 @@ const ProductList = ({ category, products }) => {
   const goToProductDetails = (productId) => {
     router.push(`/product/${productId}`); // Navigate to product details page with ID
   };
-  //  console.log(products.data[0].description,"---1")
+   console.log(products,"---product1")
   return (
     <>
       <div class="container mx-auto py-8">
@@ -42,21 +42,20 @@ const ProductList = ({ category, products }) => {
               console.log(data, "----12");
               return (
                 <>
-                  <div key={productId} className="bg-white rounded-lg shadow-lg overflow-hidden relative">
+                  <div key={productId} onClick={() => goToProductDetails(productId)} className="bg-white rounded-lg shadow-lg overflow-hidden relative transform transition-transform duration-300 hover:scale-105">
                     {/* Product Image Container */}
                     <div className="relative">
                       <img
                         src="/img/tshirt.jpg"
                         alt="Product 1"
-                        onClick={() => goToProductDetails(productId)}
                         className="w-full h-80 object-cover"
                       />
 
                       {/* Heart Icon Overlay on Product Image */}
                       <button
-                         onClick={() => toggleWishlist(productId)}
+                         onClick={() => toggleWishlist(data._id)}
                          className={`absolute top-2 right-2 ${
-                           wishlistItems.includes(productId) ? "text-red-500" : "text-gray-400"
+                           wishlistItems.includes(data._id) ? "text-red-500" : "text-gray-400"
                          } hover:text-red-700 transition duration-200`}
                       >
                         <svg
@@ -82,13 +81,16 @@ const ProductList = ({ category, products }) => {
 
                     <div className="p-4">
                       <h2 className="text-lg font-semibold mb-2">
-                        {data.description}
+                        {data.name}
                       </h2>
-                      <p className="text-gray-700 mb-4">₹499</p>
+                      <p className="text-gray-700 mb-4">₹{data.price}</p>
                       <div className="flex items-center">
                       {quantityInCart === 0 ? (
                         <button
-                          onClick={() => addToCart(data)} // Add to Cart
+                        onClick={(e) => {
+                          e.stopPropagation(); // stops triggering the card's click
+                          addToCart(data);
+                        }}// Add to Cart
                           className="block text-center bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
                         >
                           Add to Cart
@@ -97,7 +99,7 @@ const ProductList = ({ category, products }) => {
                         <div className="ml-4 flex items-center">
                           {/* Decrease quantity */}
                           <button
-                            onClick={() => decreaseQuantity(productId)} // Decrease quantity
+                            onClick={() => decreaseQuantity(data._id)} // Decrease quantity
                             className="text-xl bg-gray-300 text-black px-2 py-1 rounded-md hover:bg-gray-400"
                           >
                             -
@@ -105,7 +107,10 @@ const ProductList = ({ category, products }) => {
                           <span className="mx-2">{quantityInCart}</span>
                           {/* Increase quantity */}
                           <button
-                            onClick={() => addToCart(data)} // Increase quantity
+                           onClick={(e) => {
+                            e.stopPropagation(); // stops triggering the card's click
+                            addToCart(data);
+                          }}// Increase quantity
                             className="text-xl bg-gray-300 text-black px-2 py-1 rounded-md hover:bg-gray-400"
                           >
                             +

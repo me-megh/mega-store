@@ -1,6 +1,7 @@
-import { useState } from 'react';
-
-const Checkout = ({ cartItems }) => {
+import { useState ,useContext} from 'react';
+import { CartContext } from '../../context/cartContext';
+const Checkout = () => {
+  const { cartItems } = useContext(CartContext);
   // State to manage form data
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +27,10 @@ const Checkout = ({ cartItems }) => {
     console.log('Order Submitted:', formData);
     // You can add further logic for processing the payment and order here.
   };
-
+  const totalAmount = cartItems?.reduce(
+    (total, item) => total + item.price * (item.quantity || 1),
+    0
+  );
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-semibold mb-6">Checkout</h1>
@@ -136,7 +140,7 @@ const Checkout = ({ cartItems }) => {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
         <div className="bg-gray-100 p-4 rounded-md">
-          {cartItems.length > 0 ? (
+          {Array.isArray(cartItems) && cartItems.length > 0 ? (
             cartItems.map((item, index) => (
               <div key={index} className="flex justify-between mb-4">
                 <span>{item.name}</span>
@@ -150,12 +154,16 @@ const Checkout = ({ cartItems }) => {
             <span>Total</span>
             <span>
               ₹
-              {cartItems.reduce(
-                (total, item) => total + parseFloat(item.price.replace('₹', '')),
-                0
-              )}
+              {Array.isArray(cartItems) && cartItems.length > 0
+                ? cartItems.reduce(
+                    (total, item) => total + item.price * (item.quantity || 1),
+                    0
+                  )
+                : 0}
             </span>
           </div>
+
+
         </div>
       </div>
 

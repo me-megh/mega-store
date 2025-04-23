@@ -1,10 +1,12 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import axios from "axios";
 import { useRouter } from 'next/router';
-
+import { CartContext } from "../../context/cartContext";
 const Login = ({ setShowLogin,setShowPopup,setUser }) => {
   const router = useRouter(); // ✅ Important!
   const [isLogin, setIsLogin] = useState(true);
+  const { isUserLoggedIn,setIsUserLoggedIn } = useContext(CartContext); 
+  const { clearCart } = useContext(CartContext);
     const [form, setForm] = useState({
       name: "",
       email: "",
@@ -25,6 +27,7 @@ const Login = ({ setShowLogin,setShowPopup,setUser }) => {
       setMessage(`Success: Logged in as ${res.data.user.name}`);
       setUser(res.data.user); // after successful login
       localStorage.setItem('isLoggedIn', true);
+      setIsUserLoggedIn(true); 
       setShowPopup(false); // hide the popup
       router.push('/');
       // Optionally store token: localStorage.setItem('token', res.data.token);
@@ -32,6 +35,12 @@ const Login = ({ setShowLogin,setShowPopup,setUser }) => {
       setMessage(err.response?.data?.msg || 'Error');
     }
   };
+  useEffect(() => {
+    if (!isUserLoggedIn) {  // Check if the user is not logged in
+      localStorage.removeItem('cart'); // Clear cart if not logged in
+      clearCart();
+    }
+  }, [isUserLoggedIn,clearCart]);  // Dependency on login state
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-center text-black">Login</h2>

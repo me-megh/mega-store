@@ -1,4 +1,4 @@
-import React, { useState ,useContext} from "react";
+import React, { useState ,useContext,useEffect} from "react";
 import { FaShoppingCart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
 import Profile from  './profile';
 import Link from 'next/link';
@@ -8,7 +8,13 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const { cartItems } = useContext(CartContext);
-
+   const { isUserLoggedIn, setIsUserLoggedIn } = useContext(CartContext); 
+  
+  
+  useEffect(() => {
+    if (!isUserLoggedIn) { // If the user is logged out
+      localStorage.removeItem('cart'); // Clear cart from localStorage
+  }}, [isUserLoggedIn]);
   const totalQuantity = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   return (
     <header className="bg-gray-800 text-white">
