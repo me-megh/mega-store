@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React,{useState} from 'react'
 
-const Logout = ({ setUser }) => {
+const Logout = ({ setUser ,setIsUserLoggedIn,clearCart}) => {
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -12,7 +12,11 @@ const Logout = ({ setUser }) => {
       });
       localStorage.removeItem('isLoggedIn'); // clear login state
       localStorage.removeItem('popupShown');
+      localStorage.removeItem('cart');
       setUser(null);
+      setIsUserLoggedIn(false);
+      clearCart();
+      router.push('/'); 
     } catch (err) {
       console.error('Logout failed:', err);
     }

@@ -1,13 +1,52 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState,useEffect} from 'react';
 import { useRouter } from 'next/router';
 import { CartContext } from '../../context/cartContext';
+import axios from 'axios';
 const Cart = () => {
   // Calculate total price
   const router = useRouter();
-  const { cartItems, removeFromCart } = useContext(CartContext);
+  const {cartItems,removeFromCart, updateCart, isUserLoggedIn ,setError,error } = useContext(CartContext);
+  //  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const fetchCart = async () => {
+    if (isUserLoggedIn) {
+    try {
+      const res = await axios.get('http://localhost:3000/api/cart', { withCredentials: true });
+      updateCart(res.data.cart.items || []);
+    } catch (err) {
+      setError("Failed to load cart. Please try again later.");
+      console.error('Error fetching cart:', err);
+
+    } finally {
+      setLoading(false);
+    }
+  }
+  };
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      fetchCart(); // Only fetch if logged in
+    }
+  }, [isUserLoggedIn]);
+  const handleRemove = async (productId) => {
+    await removeFromCart(productId);
+    if (isUserLoggedIn) {
+      fetchCart(); // Refresh cart after removal
+    }
+  };
+
+  
   const totalPrice = Array.isArray(cartItems)
     ? cartItems.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0)
     : 0;
+
+    if (loading) {
+      return <div className="text-center py-8">Loading your cart...</div>;
+    }
+  
+    if (!cartItems.length) {
+      return <div className="text-center py-8 text-gray-500">Your cart is empty.</div>;
+    }
+  
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-semibold text-center mb-8">Your Cart</h1>
@@ -17,7 +56,6 @@ const Cart = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
              {cartItems.map((item, index) => {
-                console.log(item,"-cart data-")
             return(<>
             <div key={index} className="bg-white rounded-lg shadow-lg p-4 flex items-center">
               <img src={item.img} alt={item.name} className="w-24 h-24 object-cover rounded-md mr-4" />
@@ -27,7 +65,7 @@ const Cart = () => {
                 <p className="text-sm text-gray-600">Size: {item.selectedSize}</p>
                 <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
               </div>
-              <button onClick={() => removeFromCart(item._id)} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+              <button onClick={() => handleRemove(item._id)} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
                 Remove
               </button>
             </div>

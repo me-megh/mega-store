@@ -17,7 +17,17 @@ const ProductList = ({ category, products }) => {
   
   const router = useRouter(); // Use useRouter for navigation
   const handleAddToCart = (products) => {
-    addToCart(products); // Add the individual product to the cart
+    const user = JSON.parse(localStorage.getItem("user")); 
+    const productToAdd = {
+      productId: products._id,
+      name: products.name,
+      price: products.price,
+      quantity: 1,
+      selectedSize: products.sizes?.[0]?.split(",")[0] || "S", // default size,
+    };
+  
+    addToCart(productToAdd, user); 
+    // addToCart(products); // Add the individual product to the cart
   };
   const getProductQuantity = (productId) => {
     const product = cartItems.find((item) => item._id === productId);
@@ -27,7 +37,6 @@ const ProductList = ({ category, products }) => {
   const goToProductDetails = (productId) => {
     router.push(`/product/${productId}`); // Navigate to product details page with ID
   };
-   console.log(products,"---product1")
   return (
     <>
       <div class="container mx-auto py-8">
@@ -39,7 +48,6 @@ const ProductList = ({ category, products }) => {
             products.data.map((data, index) => {
               const productId = data._id;
               const quantityInCart = getProductQuantity(productId);
-              console.log(data, "----12");
               return (
                 <>
                   <div key={productId} onClick={() => goToProductDetails(productId)} className="bg-white rounded-lg shadow-lg overflow-hidden relative transform transition-transform duration-300 hover:scale-105">
@@ -85,38 +93,16 @@ const ProductList = ({ category, products }) => {
                       </h2>
                       <p className="text-gray-700 mb-4">₹{data.price}</p>
                       <div className="flex items-center">
-                      {quantityInCart === 0 ? (
                         <button
                         onClick={(e) => {
                           e.stopPropagation(); // stops triggering the card's click
-                          addToCart(data);
+                          handleAddToCart(data);
                         }}// Add to Cart
                           className="block text-center bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800"
                         >
                           Add to Cart
                         </button>
-                      ) : (
-                        <div className="ml-4 flex items-center">
-                          {/* Decrease quantity */}
-                          <button
-                            onClick={() => decreaseQuantity(data._id)} // Decrease quantity
-                            className="text-xl bg-gray-300 text-black px-2 py-1 rounded-md hover:bg-gray-400"
-                          >
-                            -
-                          </button>
-                          <span className="mx-2">{quantityInCart}</span>
-                          {/* Increase quantity */}
-                          <button
-                           onClick={(e) => {
-                            e.stopPropagation(); // stops triggering the card's click
-                            addToCart(data);
-                          }}// Increase quantity
-                            className="text-xl bg-gray-300 text-black px-2 py-1 rounded-md hover:bg-gray-400"
-                          >
-                            +
-                          </button>
-                        </div>
-                      )}
+                      
                       </div>
                     </div>
                   </div>

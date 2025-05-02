@@ -5,10 +5,8 @@ const Signup = ({ setShowLogin }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     const url = isLogin ? '/login' : '/signup';
-    console.log(url); 
     try {
       const res = await axios.post(`http://localhost:3000/api/auth${url}`, form);
-      console.log(res,"-----")
       localStorage.setItem('isLoggedIn', true);
     localStorage.setItem('user', JSON.stringify(res.data.user));
       setMessage(`Success: ${res.data.user.name}`);

@@ -18,7 +18,6 @@ const ProductPage = () => {
   }, [category]);
 
   return (<>
-  {/* <Home/> */}
   <ProductList category={category} products={products} />;
   </>)
  

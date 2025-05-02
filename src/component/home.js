@@ -16,7 +16,6 @@ catch(error){
         }
         fetchProduct();
     },[])
-    console.log(products,"------home")
     return(<>
     
     <Slider/>

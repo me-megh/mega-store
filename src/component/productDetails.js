@@ -13,25 +13,29 @@ const ProductDetails = ({ product }) => {
       setSelectedImage(product.images[0]);
     }
   }, [product]);
-
   const handleAddToCart = () => {
     if (!selectedSize) {
       alert("Please select a size"); // Alert if size is not selected
       return;
     }
+    const user = JSON.parse(localStorage.getItem("user")); // check login
 
-    // Create a product object to add to the cart
     const productToAdd = {
-      ...product,
-      selectedSize, // Include selected size
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      selectedSize,
       quantity,
-    };
-
-    addToCart(productToAdd); // Call the addToCart function
+    };    
+    addToCart(productToAdd,user); // Call the addToCart function
     router.push("/cart");
   };
 
   if (!product) return <p className="text-center py-20">Loading product...</p>;
+  const parsedSizes =
+  Array.isArray(product?.sizes) && product.sizes.length === 1
+    ? product.sizes[0].split(",").map((s) => s.trim())
+    : product.sizes || [];
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="lg:flex lg:space-x-8">
@@ -76,7 +80,7 @@ const ProductDetails = ({ product }) => {
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2">Select Size</h3>
             <div className="flex space-x-4">
-              {product?.sizes?.split(",").map((size) => (
+            {parsedSizes.map((size) => (
                 <button
                   key={size}
                   className={`px-4 py-2 border rounded-md ${
@@ -86,7 +90,7 @@ const ProductDetails = ({ product }) => {
                   }`}
                   onClick={() => setSelectedSize(size)}
                 >
-                  {size}
+                 {size}
                 </button>
               ))}
             </div>
