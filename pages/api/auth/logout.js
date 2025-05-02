@@ -14,12 +14,6 @@ const cors = initMiddleware(
 export default async function handler(req, res) {
   await cors(req, res);
   if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
-  res.setHeader('Set-Cookie', cookie.serialize('token', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development',
-    sameSite: 'strict',
-    expires: new Date(0),
-    path: '/',
-  }));
+  res.setHeader('Set-Cookie',  'token=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax');
   res.status(200).json({ msg: 'Logged out' });
 }
