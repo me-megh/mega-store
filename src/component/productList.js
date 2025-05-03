@@ -17,6 +17,7 @@ const ProductList = ({ category, products }) => {
   
   const router = useRouter(); // Use useRouter for navigation
   const handleAddToCart = (products) => {
+    console.log(products,"-----product")
     const user = JSON.parse(localStorage.getItem("user")); 
     const productToAdd = {
       productId: products._id,

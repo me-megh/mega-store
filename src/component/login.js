@@ -2,11 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { CartContext } from "../../context/cartContext";
-
+import Link from 'next/link';
 const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const { login, isUserLoggedIn, setShowPopup } = useContext(CartContext);
+  const [rememberMe, setRememberMe] = useState(false);
   // Get context values
   const [form, setForm] = useState({
     name: "",
@@ -17,16 +18,25 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value .trimStart()});
+    console.log("Form values:", form); 
   };
-
+  useEffect(() => {
+    const savedPref = localStorage.getItem("rememberMe");
+    if (savedPref) setRememberMe(savedPref === "true");
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem("rememberMe", rememberMe);
+  }, [rememberMe]);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isLogin ? "/login" : "/signup";
     try {
       const res = await axios.post(
         `http://localhost:3000/api/auth${url}`,
-        form,
+        { ...form, rememberMe },
         {
           withCredentials: true,
         }
@@ -50,6 +60,7 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-center text-black">Login</h2>
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Field */}
         <div>
@@ -65,9 +76,10 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
             name="email"
             value={form.email}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black placeholder-gray-500 bg-white visible"
             placeholder="you@example.com"
             required
+            style={{ color: 'black', visibility: 'visible' }} 
           />
         </div>
 
@@ -85,7 +97,7 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
             name="password"
             value={form.password}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black placeholder-gray-500 bg-white visible"
             placeholder="••••••••"
             required
           />
@@ -97,12 +109,17 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
             <input
               type="checkbox"
               className="form-checkbox h-4 w-4 text-indigo-600"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
             />
             <span className="ml-2 text-sm text-gray-600">Remember me</span>
           </label>
-          <a href="#" className="text-sm text-indigo-600 hover:underline">
+          {/* <a  href="/forgot-password" onClick={() => setShowLoginPopup(false)} className="text-sm text-indigo-600 hover:underline">
             Forgot your password?
-          </a>
+          </a> */}
+          <Link href="/forgot-password" className="text-sm text-indigo-600 hover:underline">
+          Forgot your password?
+          </Link>
         </div>
 
         {/* Login Button */}
@@ -110,7 +127,7 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
           type="submit"
           className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          {isLogin ? "Login" : "Sign Up"}
+          Login
         </button>
       </form>
 
@@ -123,17 +140,6 @@ const Login = ({ handleLoginSuccess, setShowLoginPopup, onLoginSuccess }) => {
           {message}
         </p>
       )}
-
-      {/* Toggle Login/Signup */}
-      <p className="text-sm text-center text-gray-600 mt-4">
-        {isLogin ? "Don't have an account?" : "Already have an account?"}
-        <button
-          className="text-indigo-600 hover:underline ml-1"
-          onClick={() => setIsLogin(!isLogin)}
-        >
-          {isLogin ? "Sign up" : "Login"}
-        </button>
-      </p>
     </div>
   );
 };

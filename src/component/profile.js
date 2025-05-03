@@ -4,12 +4,13 @@ import Logout from './logout';
 import Login from './login';
 import { useRouter } from 'next/router';
 import { CartContext } from '../../context/cartContext';
-
+import Signup from '../component/signup';
 const Profile = () => {
   const { user, setUser ,clearCart} = useContext(CartContext);
   const [showLoginPopup, setShowLoginPopup] = useState(false); 
   const [showMenu, setShowMenu] = useState(false); 
   const [isFetching, setIsFetching] = useState(false);  
+    const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
@@ -92,7 +93,22 @@ const handleLogout = () => {
             <button onClick={() => setShowLoginPopup(false)} className="text-gray-500 float-right text-xl font-bold">
               &times;
             </button>
-            <Login setShowPopup={setShowLoginPopup} setUser={setUser}  handleLoginSuccess={handleLoginSuccess} />
+            {/* Render Login or Signup based on `isLogin` */}
+            {isLogin ? (
+              <Login handleLoginSuccess={handleLoginSuccess} setShowLoginPopup={setShowLoginPopup} />
+            ) : (
+              <Signup handleLoginSuccess={handleLoginSuccess} setShowLoginPopup={setShowLoginPopup} />
+            )}
+            {/* Toggle between Login and Signup */}
+            <p className="text-sm text-center text-gray-600 mt-4">
+              {isLogin ? "Don't have an account?" : "Already have an account?"}
+              <button
+                className="text-indigo-600 hover:underline ml-1"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Sign up" : "Login"}
+              </button>
+            </p>
           </div>
         </div>
       )}

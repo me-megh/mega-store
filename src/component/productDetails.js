@@ -27,6 +27,7 @@ const ProductDetails = ({ product }) => {
       selectedSize,
       quantity,
     };    
+    console.log(productToAdd,user,"------productdetais")
     addToCart(productToAdd,user); // Call the addToCart function
     router.push("/cart");
   };
