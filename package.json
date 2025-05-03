@@ -8,6 +8,7 @@
     "mongoose": "^8.13.2",
     "next": "^13.0.0",
     "next-auth": "^4.24.11",
+    "nodemailer": "^6.10.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "validator": "^13.15.0"

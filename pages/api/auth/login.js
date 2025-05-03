@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
   await dbConnect();
 
-  const { email, password } = req.body;
+  const { email, password,rememberMe } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ msg: 'Please enter all fields' });
@@ -38,13 +38,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ msg: 'Invalid credentials' });
   }
   try {
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30m' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: rememberMe ? '7d' : '30m' });
     console.log(token, "Generated Token");
     
     res.setHeader('Set-Cookie', cookie.serialize('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: rememberMe ? 60 * 60 * 24 * 7 : undefined,
         sameSite: 'lax',
         path: '/',
       }));
