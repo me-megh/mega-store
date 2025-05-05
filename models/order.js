@@ -43,17 +43,35 @@ const orderSchema = new mongoose.Schema({
     },
   },
   paymentInfo: {
-    cardNumber: {
+      method: { type: String, required: true, enum: ['card', 'upi','razorpay'] },
+      upiId: {
+        type: String,
+        required: function() { return this.paymentInfo.method === 'upi'; }
+      },
+      cardNumber: {
+        type: String,
+        required: function() { return this.paymentInfo.method === 'card'; }
+      },
+      cardExpiry: {
+        type: String,
+        required: function() { return this.paymentInfo.method === 'card'; }
+      },
+      cardCVV: {
+        type: String,
+        required: function() { return this.paymentInfo.method === 'card'; }
+      }
+    ,
+    razorpay_order_id: {
       type: String,
-      required: true,
+      required: function () {
+        return this.paymentInfo.method === 'razorpay';
+      },
     },
-    cardExpiry: {
+    razorpay_payment_id: {
       type: String,
-      required: true,
-    },
-    cardCVV: {
-      type: String,
-      required: true,
+      required: function () {
+        return this.paymentInfo.method === 'razorpay';
+      },
     },
   },
   status: {

@@ -22,6 +22,7 @@ export default async function handler(req, res) {
   await dbConnect();
   if (req.method === "POST") {
     try {
+      console.log(req.body,"----requBody");
       // 1. Read token from cookies
       const token = req.cookies.token;
 
@@ -31,16 +32,43 @@ export default async function handler(req, res) {
 
       // 2. Verify token
       const decoded = jwt.verify(token, JWT_SECRET);
-      if (!decoded || !decoded.id) {
-        return res.status(401).json({ message: "Invalid token" });
-      }
+      if (!decoded?.id) throw new Error("Decoded token missing user ID");
 
-      const { userID, products, total, shipping, paymentInfo } = req.body;
+      const {  products, total, shipping, paymentInfo  } = req.body;
+      console.log('Received order data:', req.body);
        // Validate that all required fields are provided
-       if (!shipping || !shipping.name || !shipping.address || !shipping.city || !shipping.state || !shipping.postalCode || !shipping.phone) {
-        return res.status(400).json({ message: "Missing required shipping fields" });
+       if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ message: "Products list is empty or invalid" });
       }
-      // 4. Create new Order
+      
+    if (!paymentInfo || !paymentInfo.method) {
+      return res.status(400).json({ message: "Payment method is required" });
+    }
+
+    const method = paymentInfo.method;
+
+    if (method === 'card') {
+      if (!paymentInfo.cardNumber || !paymentInfo.cardExpiry || !paymentInfo.cardCVV) {
+        return res.status(400).json({ message: "Card details are incomplete" });
+      }
+    }
+
+    if (method === 'upi') {
+      if (!paymentInfo.upiId) {
+        return res.status(400).json({ message: "UPI ID is required" });
+      }
+    }
+
+    if (method === 'razorpay') {
+      if (
+        !paymentInfo.razorpay_order_id ||
+        !paymentInfo.razorpay_payment_id ||
+        !paymentInfo.razorpay_signature
+      ) {
+        return res.status(400).json({ message: "Razorpay payment details are incomplete" });
+      }
+    }
+
       const order = new Order({
         user: decoded.id, // 👈 decoded user id from token
         products,
@@ -79,6 +107,7 @@ export default async function handler(req, res) {
     }
   }
   else {
-    return res.status(405).json({ message: "Method not allowed" });
+    res.setHeader("Allow", ["GET", "POST"]);
+return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
