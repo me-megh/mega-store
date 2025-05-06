@@ -8,11 +8,12 @@ const ProductList = ({ category, products }) => {
   const { addToCart, cartItems, decreaseQuantity } = useContext(CartContext);
   // Toggle wishlist function for the first product
   const toggleWishlist = (productId) => {
-    setWishlistItems((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId) // remove from wishlist
-        : [...prev, productId] // add to wishlist
-    );
+    const updatedWishlist = wishlistItems.includes(productId)
+    ? wishlistItems.filter((id) => id !== productId)
+    : [...wishlistItems, productId];
+
+  setWishlistItems(updatedWishlist);
+  localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
   };
   
   const router = useRouter(); // Use useRouter for navigation
@@ -38,6 +39,11 @@ const ProductList = ({ category, products }) => {
   const goToProductDetails = (productId) => {
     router.push(`/product/${productId}`); // Navigate to product details page with ID
   };
+  useEffect(() => {
+    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    setWishlistItems(storedWishlist);
+  }, []);
+  
   return (
     <>
       <div class="container mx-auto py-8">
@@ -62,7 +68,10 @@ const ProductList = ({ category, products }) => {
 
                       {/* Heart Icon Overlay on Product Image */}
                       <button
-                         onClick={() => toggleWishlist(data._id)}
+                         onClick={(e) => {
+                          e.stopPropagation(); // ✅ Prevent click from bubbling to the product card
+                          toggleWishlist(data._id);
+                        }}
                          className={`absolute top-2 right-2 ${
                            wishlistItems.includes(data._id) ? "text-red-500" : "text-gray-400"
                          } hover:text-red-700 transition duration-200`}

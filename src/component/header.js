@@ -1,50 +1,67 @@
-import React, { useState ,useContext,useEffect} from "react";
-import { FaShoppingCart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
-import Profile from  './profile';
-import Link from 'next/link';
+import React, { useState, useContext, useEffect } from "react";
+import { FaShoppingCart , FaHeart,} from "react-icons/fa"; // Importing FontAwesome shopping cart icon
+import Profile from "./profile";
+import Link from "next/link";
 import { CartContext } from "../../context/cartContext";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const { cartItems } = useContext(CartContext);
-   const { isUserLoggedIn, setIsUserLoggedIn } = useContext(CartContext); 
-  
-  
+  const { isUserLoggedIn, setIsUserLoggedIn } = useContext(CartContext);
+
   useEffect(() => {
-    if (!isUserLoggedIn) { // If the user is logged out
-      localStorage.removeItem('cart'); // Clear cart from localStorage
-  }}, [isUserLoggedIn]);
-  const totalQuantity = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    if (!isUserLoggedIn) {
+      // If the user is logged out
+      localStorage.removeItem("cart"); // Clear cart from localStorage
+    }
+  }, [isUserLoggedIn]);
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + (item.quantity || 1),
+    0
+  );
   return (
     <header className="bg-gray-800 text-white">
       <div className="container mx-auhref px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="text-2xl font-bold">
-        <a href="/">Company Logo</a> {/* Use Link for navigation */}
+          <a href="/">Company Logo</a> {/* Use Link for navigation */}
         </div>
 
         {/* Menu items - visible on larger screens */}
-        <Link href="/" className="hover:text-gray-300">Home</Link>
-          <Link href="/products?category=men" className="hover:text-gray-300">Men's T-shirts</Link>
-          <Link href="/products?category=women" className="hover:text-gray-300">Women's T-shirts</Link>
+        <Link href="/" className="hover:text-gray-300">
+          Home
+        </Link>
+        <Link href="/products?category=men" className="hover:text-gray-300">
+          Men's T-shirts
+        </Link>
+        <Link href="/products?category=women" className="hover:text-gray-300">
+          Women's T-shirts
+        </Link>
 
         {/* Cart and Profile Icons - visible on all screens */}
         <div className="flex items-center space-x-4">
+          {/* Wishlist Icon */}
+          <Link href="/wishlist" className="relative">
+          <FaHeart className="w-6 h-6 text-pink-400 hover:text-pink-500" />
+            </Link>
           {/* Cart Icon */}
           <Link href="/cart" className="relative">
             <FaShoppingCart className="w-6 h-6" />
             {/* Badge href show the number of items in the cart */}
             {totalQuantity > 0 && (
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-          {totalQuantity}
-        </span>
-      )}
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                {totalQuantity}
+              </span>
+            )}
           </Link>
 
           {/* Profile Icon */}
-          <Profile user={user} setUser={setUser} setShowLoginPopup={setShowLoginPopup} />
-
+          <Profile
+            user={user}
+            setUser={setUser}
+            setShowLoginPopup={setShowLoginPopup}
+          />
         </div>
 
         {/* Hamburger menu - visible on smaller screens */}
@@ -74,19 +91,37 @@ const Header = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <nav className="md:hidden bg-gray-800">
-          <Link href="/" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link
+            href="/"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Home
           </Link>
-          <Link href="/products?category=men" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link
+            href="/products?category=men"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Men's T-shirts
           </Link>
-          <Link href="/products?category=women" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link
+            href="/products?category=women"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Women's T-shirts
           </Link>
-          <Link href="/login" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link href="/wishlist" className="block px-4 py-2 text-white hover:bg-gray-700">
+            Wishlist
+          </Link>
+          <Link
+            href="/login"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Login
           </Link>
-          <Link href="/logout" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link
+            href="/logout"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Logout
           </Link>
         </nav>
