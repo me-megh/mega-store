@@ -17,6 +17,11 @@ export default function ResetPasswordForm() {
       setMessage("Passwords do not match");
       return;
     }
+    if (!token) {
+      setMessage("Invalid or missing reset token.");
+      return;
+    }
+    setLoading(true);
     try {
       const res = await axios.post("http://localhost:3000/api/auth/reset-password", {
         token,

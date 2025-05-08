@@ -26,6 +26,8 @@ const WishlistPage = () => {
   
       if (storedWishlist.length > 0) {
         fetchWishlistProducts();
+      }else{
+        setLoading(false);
       }
     }, []);
     const handleRemove = (productId) => {

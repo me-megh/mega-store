@@ -43,17 +43,24 @@ export const CartProvider = ({ children }) => {
   
   
   const addToCart = async(product, user) => {
-    if (user && user.token) {
+    const productId = product._id || product.productId;
+    console.log(productId,"-------productid")
+    const selectedSize = product.selectedSize || product.sizes?.[0]?.split(",")[0] || 'S';
+    console.log(productId,"-------productid2")
+    console.log(user,"-------user")
+    if (user) {
+      console.log(productId,"-------productid3")
     try {
       const res = await axios.post(
         'http://localhost:3000/api/cart',
         {
-          productId: product._id,
+          productId,
           quantity: 1,
-          selectedSize: product.selectedSize || 'S',
+          selectedSize,
         },
         { withCredentials: true }
       );
+      console.log(res,"---res")
       setCartItems(res.data.cart.items);
     } catch (err) {
       setError('Failed to send cart. Please try again later.');
@@ -61,27 +68,30 @@ export const CartProvider = ({ children }) => {
     }
   }else {
     // Guest mode - store in localStorage
-    const existingProduct = cartItems.find(item => item._id === product._id && item.selectedSize === product.selectedSize);
-    let updatedCart;
-    if (existingProduct) {
-      updatedCart = cartItems.map(item =>
-        item._id === product._id && item.selectedSize === product.selectedSize
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
+    const cartFromStorage = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingIndex = cartFromStorage.findIndex(item => item._id === product._id && item.selectedSize === selectedSize);
+    if (existingIndex >= 0) {
+      cartFromStorage[existingIndex].quantity += 1;
     } else {
-      updatedCart = [...cartItems, { ...product, quantity: 1 }];
-    }setCartItems(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+      cartFromStorage.push({
+        productId,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        selectedSize,
+        img: product.img || "/img/tshirt.jpg",
+      });
+    }
+    localStorage.setItem("cart", JSON.stringify(cartFromStorage));
+    setCartItems(cartFromStorage);
   }
 };
 
-  const removeFromCart =async (productId) => {
+  const removeFromCart =async (productId,selectedSize) => {
     // setCartItems(cartItems.filter((item) => item._id !== id));
     if (isUserLoggedIn) {
     try {
       const res = await axios.delete(`http://localhost:3000/api/cart`, {
-        data: { productId },
         withCredentials: true,
       });
       setCartItems(res.data.cart.items);
@@ -90,24 +100,30 @@ export const CartProvider = ({ children }) => {
       console.error(err); 
     }}
     else {
-      const updatedCart = cartItems.filter(item => item._id !== productId);
+      const updatedCart = cartItems.filter(item => item._id !== productId && item.selectedSize === selectedSize);
       setCartItems(updatedCart);
       localStorage.setItem('cart', JSON.stringify(updatedCart));
     }
   };
 
-  const decreaseQuantity = (productId) => {
-    const product = cartItems.find((item) => item._id === productId);
+  const decreaseQuantity = (productId,selectedSize) => {
+    const product = cartItems.find((item) => item._id === productId && item.selectedSize === selectedSize);
     if (!product) return;
 
     if (product.quantity === 1) {
-      setCartItems(cartItems.filter((item) => item._id !== productId));
+      const updatedCart = cartItems.filter(
+        item => !(item.productId === productId && item.selectedSize === selectedSize)
+      );
+      setCartItems(updatedCart);
     } else {
-      const updatedCart = cartItems.map((item) =>
-        item._id === productId ? { ...item, quantity: item.quantity - 1 } : item
+      const updatedCart = cartItems.map(item =>
+        item.productId === productId && item.selectedSize === selectedSize
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       );
       setCartItems(updatedCart);
     }
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   };
   const updateCart = (items) => {
     setCartItems(items);
@@ -158,6 +174,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         addToCart,
+        setCartItems,
         removeFromCart,
         decreaseQuantity,
         user,

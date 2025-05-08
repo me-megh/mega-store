@@ -62,13 +62,16 @@ const Checkout = () => {
 
   // Total amount calculation using useMemo
   const totalAmount = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
+    const subtotal =  cartItems.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
+    const shippingCharges = 99; 
+    return subtotal + shippingCharges;
   }, [cartItems]);
 
   // Place the order and save payment details
   const placeOrder = async (razorpayResponse = null) => {
     try {
-      console.log("Order data being sent:", formData); 
+      const shippingCharges = 99; // Shipping charge
+    const totalAmountWithShipping = totalAmount + shippingCharges;; 
       const paymentInfo = {
         method: paymentMethod,
       };
@@ -95,7 +98,7 @@ const Checkout = () => {
           productId: item._id,
           quantity: item.quantity || 1,
         })),
-        total: totalAmount,
+        total: totalAmountWithShipping,
         shipping: {
           name: formData.name,
           address: formData.address,
@@ -136,7 +139,7 @@ const Checkout = () => {
       if (paymentMethod === 'razorpay') {
         const razorpayOptions = {
           key: 'YOUR_RAZORPAY_KEY_ID',
-          amount: totalAmount * 100, // Amount in smallest unit
+          amount: totalAmountWithShipping * 100, // Amount in smallest unit
           currency: 'INR',
           name: 'Our One Store',
           description: 'Order Payment',
@@ -279,6 +282,15 @@ const Checkout = () => {
               />
               Pay with Razorpay (Google Pay, PhonePe, etc.)
             </label>
+            <label>
+              <input
+              type="radio"
+              value="cod"
+              hecked={paymentMethod === 'cod'}
+              onChange={() => setPaymentMethod('cod')}
+              />
+              Cash on Delivery (COD)  
+            </label>
           </div>
         </div>
 
@@ -333,7 +345,13 @@ const Checkout = () => {
         )}
 
         <div className="flex justify-between">
-          <p className="text-lg font-semibold">Total: ₹{totalAmount}</p>
+        <div>
+           <p className="text-lg font-semibold">Subtotal: ₹{cartItems.reduce(
+            (total, item) => total + item.price * (item.quantity || 1), 0
+           )}</p>
+          <p className="text-lg font-semibold">Shipping: ₹99</p>
+        </div>
+        <p className="text-lg font-semibold">Total: ₹{totalAmount}</p>
           <button
             type="submit"
             className="bg-blue-500 text-white py-2 px-4 rounded-md"

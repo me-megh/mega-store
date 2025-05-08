@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { FaShoppingCart , FaHeart,} from "react-icons/fa"; // Importing FontAwesome shopping cart icon
+import { FaShoppingCart, FaHeart } from "react-icons/fa"; // Importing FontAwesome shopping cart icon
 import Profile from "./profile";
 import Link from "next/link";
 import { CartContext } from "../../context/cartContext";
@@ -43,11 +43,11 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {/* Wishlist Icon */}
           <Link href="/wishlist" className="relative">
-          <FaHeart className="w-6 h-6 text-pink-400 hover:text-pink-500" />
-            </Link>
+          <FaHeart className="w-6 h-6 text-pink-400 hover:text-pink-500 animate-heartbeat" />
+          </Link>
           {/* Cart Icon */}
           <Link href="/cart" className="relative">
-            <FaShoppingCart className="w-6 h-6" />
+            <FaShoppingCart className="w-6 h-6 hover:animate-shake text-white-500"/>
             {/* Badge href show the number of items in the cart */}
             {totalQuantity > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
@@ -109,7 +109,10 @@ const Header = () => {
           >
             Women's T-shirts
           </Link>
-          <Link href="/wishlist" className="block px-4 py-2 text-white hover:bg-gray-700">
+          <Link
+            href="/wishlist"
+            className="block px-4 py-2 text-white hover:bg-gray-700"
+          >
             Wishlist
           </Link>
           <Link

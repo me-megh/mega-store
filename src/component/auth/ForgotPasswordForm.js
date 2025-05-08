@@ -13,7 +13,16 @@ export default function ForgotPasswordForm() {
       console.log(res,"-----")
       setMessage(res.data.msg);
     } catch (err) {
-      setMessage(err.response?.data?.msg || "Something went wrong");
+      if (err.response?.data?.msg) {
+        setMessage(err.response.data.msg);
+      } else if (err.request) {
+        setMessage("No response from server. Please check your internet connection.");
+      } else {
+        setMessage("An unexpected error occurred. Please try again later.");
+      }
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -30,10 +39,10 @@ export default function ForgotPasswordForm() {
           required
         />
         <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
+          type="submit" disabled={loading}
+          className={`w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 ${loading && "opacity-50 cursor-not-allowed"}`}
         >
-          Send Reset Link
+          {loading ? "Sending..." : "Send Reset Link"}
         </button>
       </form>
       {message && <p className="mt-4 text-sm text-center text-gray-700">{message}</p>}

@@ -21,15 +21,32 @@ const ProductList = ({ category, products }) => {
     console.log(products,"-----product")
     const user = JSON.parse(localStorage.getItem("user")); 
     const productToAdd = {
-      productId: products._id,
+      productId: products._id || products.productId,
       name: products.name,
       price: products.price,
       quantity: 1,
       selectedSize: products.sizes?.[0]?.split(",")[0] || "S", // default size,
     };
-  
-    addToCart(productToAdd, user); 
+    if (!user) {
+  // Check if product is already in the cart (based on ID and size)
+  const cartItemsFromStorage = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existingProductIndex = cartItemsFromStorage.findIndex(
+    (item) => item.productId === productToAdd.productId && item.selectedSize === productToAdd.selectedSize
+  );
+
+  if (existingProductIndex >= 0) {
+    cartItemsFromStorage[existingProductIndex].quantity += 1;  // Increment quantity
+  } else {
+    cartItemsFromStorage.push(productToAdd);  // Add new product
+  }
+
+  // Update localStorage with the updated cart
+  localStorage.setItem("cart", JSON.stringify(cartItemsFromStorage));
+} else {
+  addToCart(products, user);
     // addToCart(products); // Add the individual product to the cart
+}
   };
   const getProductQuantity = (productId) => {
     const product = cartItems.find((item) => item._id === productId);

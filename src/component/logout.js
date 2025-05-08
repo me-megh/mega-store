@@ -13,6 +13,7 @@ const Logout = ({ setUser ,setIsUserLoggedIn,clearCart}) => {
       localStorage.removeItem('isLoggedIn'); // clear login state
       localStorage.removeItem('popupShown');
       localStorage.removeItem('cart');
+      // localStorage.removeItem("wishlist");
       setUser(null);
       setIsUserLoggedIn(false);
       clearCart();
