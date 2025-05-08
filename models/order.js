@@ -43,7 +43,7 @@ const orderSchema = new mongoose.Schema({
     },
   },
   paymentInfo: {
-      method: { type: String, required: true, enum: ['card', 'upi','razorpay'] },
+      method: { type: String, required: true, paymentStatus: 'pending',enum: ['card', 'upi','razorpay','cod'] },
       upiId: {
         type: String,
         required: function() { return this.paymentInfo.method === 'upi'; }
@@ -74,9 +74,16 @@ const orderSchema = new mongoose.Schema({
       },
     },
   },
+  paymentStatus: {
+      type: String,
+      enum: ['pending', 'paid'],
+      default: function () {
+        return this.method === 'cod' ? 'pending' : 'paid';
+      },
+    },
   status: {
     type: String,
-    enum: ["Processing", "Completed", "Cancelled"],
+    enum: ["Processing", "Completed", "Cancelled","pending"],
     default: "Processing",
   },
   createdAt: {
